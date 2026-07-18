@@ -8,19 +8,38 @@ interface ContactFormModalProps {
 
 export default function ContactFormModal({ isOpen, onClose }: ContactFormModalProps) {
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = 'Inquiry from Scaffas Homes Website';
-    const body = `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`;
-    window.location.href = `mailto:info@scaffashomes.com.au?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setFormData({ name: '', email: '', message: '' });
-    onClose();
+    setIsSubmitting(true);
+
+    try {
+      const response = await fetch('https://formspree.io/f/xvzeazvb', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        alert('Thank you! Your inquiry has been sent successfully.');
+        setFormData({ name: '', email: '', message: '' });
+        onClose();
+      } else {
+        alert('There was an error sending your message. Please try again.');
+      }
+    } catch (error) {
+      alert('There was an error sending your message. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (!isOpen) return null;
