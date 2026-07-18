@@ -1,0 +1,8 @@
+{
+  "id": "3",
+  "subject": "Intent classification",
+  "description": "Classify each keyword, exclude navigational",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

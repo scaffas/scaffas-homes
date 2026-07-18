@@ -1,0 +1,10 @@
+{
+  "seranking": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/seranking/seo-skills.git"
+    },
+    "installLocation": "C:\\Users\\MyPC\\.claude\\plugins\\marketplaces\\seranking",
+    "lastUpdated": "2026-07-04T21:48:46.019Z"
+  }
+}

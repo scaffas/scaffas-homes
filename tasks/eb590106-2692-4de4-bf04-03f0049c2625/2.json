@@ -1,0 +1,8 @@
+{
+  "id": "2",
+  "subject": "SERP overlap clustering",
+  "description": "Group keywords by shared top-10 results / intent groups",
+  "status": "completed",
+  "blocks": [],
+  "blockedBy": []
+}

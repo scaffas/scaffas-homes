@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", ui-serif, Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-brand-cream: #FAF9F6;
+  --color-brand-sand: #EAECE6;
+  --color-brand-gold: #C5A059;
+  --color-brand-darkgold: #A68345;
+  --color-brand-forest: #225F51;
+  --color-brand-darkforest: #164036;
+  --color-brand-charcoal: #172421;
+  --color-brand-clay: #445952;
+  --color-brand-terracotta: #225F51;
+}
+
+/* Custom scrollbar styling to match high-end design */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FAF9F5;
+}
+::-webkit-scrollbar-thumb {
+  background: #E6DFD3;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C5A059;
+}
+
+/* Custom utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.dark-glass-panel {
+  background: rgba(31, 29, 28, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+

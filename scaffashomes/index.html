@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scaffas Homes | Short-Term Rentals in Sydney</title>
+  <meta name="description" content="Discover beautiful short-term rental properties in Sydney. Book directly or through Airbnb." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --clr-bg: #ffffff;
+      --clr-bg-soft: #f7f7f5;
+      --clr-text: #1a1a1a;
+      --clr-text-muted: #6b6b6b;
+      --clr-accent: #2d6a4f;
+      --clr-accent-light: #e8f4ef;
+      --clr-border: #e5e5e5;
+      --font: 'Inter', system-ui, sans-serif;
+      --radius: 12px;
+      --max-w: 1100px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--clr-bg);
+      color: var(--clr-text);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--clr-border);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 1.15rem; font-weight: 600; letter-spacing: -0.02em;
+      color: var(--clr-text); text-decoration: none;
+    }
+    .nav-logo span { color: var(--clr-accent); }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      font-size: 0.9rem; color: var(--clr-text-muted); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--clr-accent); }
+
+    .nav-cta {
+      background: var(--clr-accent); color: #fff;
+      padding: 0.5rem 1.25rem; border-radius: 8px; font-size: 0.875rem;
+      text-decoration: none; font-weight: 500; transition: opacity 0.2s;
+    }
+    .nav-cta:hover { opacity: 0.85; }
+
+    .nav-toggle { display: none; background: none; border: none; cursor: pointer; font-size: 1.5rem; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.15) 60%, rgba(0,0,0,0.55) 100%),
+                  url('images/hero.jpg') center/cover no-repeat;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; color: #fff; padding: 6rem 1.5rem 4rem;
+    }
+
+    .hero-inner { max-width: 680px; }
+    .hero-eyebrow {
+      display: inline-block; font-size: 0.8rem; letter-spacing: 0.12em;
+      text-transform: uppercase; background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.3); border-radius: 999px;
+      padding: 0.3rem 1rem; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 600;
+      line-height: 1.15; letter-spacing: -0.02em; margin-bottom: 1.25rem;
+    }
+    .hero p {
+      font-size: 1.1rem; opacity: 0.9; margin-bottom: 2.5rem; line-height: 1.7;
+    }
+    .hero-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: var(--clr-accent); color: #fff; padding: 0.875rem 2rem;
+      border-radius: 10px; font-size: 1rem; font-weight: 500;
+      text-decoration: none; transition: opacity 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-outline {
+      background: rgba(255,255,255,0.1); color: #fff;
+      border: 1.5px solid rgba(255,255,255,0.6); padding: 0.875rem 2rem;
+      border-radius: 10px; font-size: 1rem; font-weight: 500;
+      text-decoration: none; transition: background 0.2s;
+    }
+    .btn-outline:hover { background: rgba(255,255,255,0.2); }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 5rem 1.5rem; }
+    .container { max-width: var(--max-w); margin: 0 auto; }
+    .section-label {
+      font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--clr-accent); font-weight: 600; margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600;
+      letter-spacing: -0.02em; line-height: 1.2; margin-bottom: 1rem;
+    }
+    .section-sub { color: var(--clr-text-muted); font-size: 1rem; max-width: 520px; }
+
+    /* ── PROPERTY ── */
+    #property { background: var(--clr-bg-soft); }
+    .property-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+    }
+    .property-meta {
+      display: flex; flex-wrap: wrap; gap: 1.25rem; margin: 2rem 0;
+    }
+    .meta-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; }
+    .meta-icon { font-size: 1.3rem; }
+    .meta-label { color: var(--clr-text-muted); }
+    .meta-val { font-weight: 600; }
+    .price-tag {
+      display: inline-flex; align-items: baseline; gap: 0.3rem;
+      background: var(--clr-accent-light); border: 1px solid #b7dbc8;
+      border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1.5rem;
+    }
+    .price-amt { font-size: 1.6rem; font-weight: 700; color: var(--clr-accent); }
+    .price-unit { font-size: 0.9rem; color: var(--clr-accent); }
+
+    .property-img {
+      border-radius: var(--radius); overflow: hidden; aspect-ratio: 4/3;
+      background: var(--clr-border);
+    }
+    .property-img img { width: 100%; height: 100%; object-fit: cover; }
+    .property-img-placeholder {
+      width: 100%; height: 100%; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 0.75rem;
+      color: var(--clr-text-muted); font-size: 0.9rem; min-height: 320px;
+    }
+    .property-img-placeholder svg { opacity: 0.3; }
+
+    /* ── GALLERY ── */
+    #gallery { background: var(--clr-bg); }
+    .gallery-header { margin-bottom: 2.5rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: auto auto;
+      gap: 12px;
+    }
+    .gallery-item {
+      border-radius: 10px; overflow: hidden; aspect-ratio: 4/3;
+      background: var(--clr-bg-soft); cursor: pointer; position: relative;
+    }
+    .gallery-item:first-child {
+      grid-column: span 2; grid-row: span 2; aspect-ratio: unset; min-height: 380px;
+    }
+    .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.4s; }
+    .gallery-item:hover img { transform: scale(1.04); }
+    .gallery-item-ph {
+      width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+      color: var(--clr-text-muted); font-size: 0.8rem; text-align: center;
+      flex-direction: column; gap: 0.5rem; min-height: 140px;
+    }
+    .gallery-item-ph svg { opacity: 0.25; }
+
+    /* ── AMENITIES ── */
+    #amenities { background: var(--clr-bg-soft); }
+    .amenities-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1rem;
+      margin-top: 2.5rem;
+    }
+    .amenity-card {
+      background: var(--clr-bg); border: 1px solid var(--clr-border);
+      border-radius: var(--radius); padding: 1.25rem 1rem;
+      display: flex; flex-direction: column; align-items: flex-start; gap: 0.6rem;
+    }
+    .amenity-icon { font-size: 1.5rem; }
+    .amenity-name { font-size: 0.9rem; font-weight: 500; }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--clr-bg); }
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start;
+    }
+    .contact-info { padding-top: 0.5rem; }
+    .contact-info p { color: var(--clr-text-muted); margin: 1rem 0 2rem; line-height: 1.8; }
+    .contact-detail { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem; }
+    .contact-detail-icon { width: 40px; height: 40px; border-radius: 10px;
+      background: var(--clr-accent-light); display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; flex-shrink: 0; }
+    .contact-detail-text { font-size: 0.9rem; }
+    .contact-detail-text span { display: block; color: var(--clr-text-muted); font-size: 0.78rem; }
+
+    form { display: flex; flex-direction: column; gap: 1rem; }
+    form label { font-size: 0.85rem; font-weight: 500; color: var(--clr-text); }
+    form input, form textarea, form select {
+      width: 100%; padding: 0.75rem 1rem;
+      border: 1px solid var(--clr-border); border-radius: 8px;
+      font-size: 0.95rem; font-family: var(--font); color: var(--clr-text);
+      background: var(--clr-bg-soft); outline: none; transition: border-color 0.2s;
+      margin-top: 0.3rem; display: block;
+    }
+    form input:focus, form textarea:focus, form select:focus {
+      border-color: var(--clr-accent); background: #fff;
+    }
+    form textarea { resize: vertical; min-height: 120px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .btn-submit {
+      background: var(--clr-accent); color: #fff; border: none; cursor: pointer;
+      padding: 0.875rem 2rem; border-radius: 8px; font-size: 1rem; font-weight: 500;
+      font-family: var(--font); transition: opacity 0.2s; align-self: flex-start;
+    }
+    .btn-submit:hover { opacity: 0.85; }
+    .form-success {
+      display: none; background: var(--clr-accent-light); border: 1px solid #b7dbc8;
+      border-radius: 8px; padding: 1rem 1.25rem; color: var(--clr-accent); font-size: 0.9rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #111; color: rgba(255,255,255,0.6);
+      padding: 3rem 1.5rem 2rem; text-align: center;
+    }
+    .footer-logo { color: #fff; font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .footer-logo span { color: #6fcf97; }
+    footer p { font-size: 0.85rem; margin-bottom: 1.5rem; }
+    .footer-links { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 2rem; }
+    .footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+    .footer-links a:hover { color: #fff; }
+    .footer-copy { font-size: 0.78rem; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 1.5rem; }
+
+    /* ── LIGHTBOX ── */
+    .lightbox {
+      display: none; position: fixed; inset: 0; z-index: 500;
+      background: rgba(0,0,0,0.9); align-items: center; justify-content: center;
+    }
+    .lightbox.open { display: flex; }
+    .lightbox img { max-width: 90vw; max-height: 90vh; border-radius: 8px; }
+    .lightbox-close {
+      position: absolute; top: 1rem; right: 1.25rem; font-size: 2rem;
+      color: #fff; cursor: pointer; background: none; border: none; line-height: 1;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-toggle { display: block; }
+      .mobile-menu {
+        display: none; flex-direction: column; gap: 0; position: fixed;
+        top: 64px; left: 0; right: 0; background: #fff;
+        border-bottom: 1px solid var(--clr-border); z-index: 99;
+      }
+      .mobile-menu.open { display: flex; }
+      .mobile-menu a {
+        padding: 1rem 2rem; font-size: 1rem; color: var(--clr-text);
+        text-decoration: none; border-bottom: 1px solid var(--clr-border);
+      }
+      .property-grid, .contact-wrap { grid-template-columns: 1fr; gap: 2rem; }
+      .gallery-grid { grid-template-columns: 1fr 1fr; }
+      .gallery-item:first-child { grid-column: span 2; min-height: 220px; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-btns { flex-direction: column; align-items: center; }
+    }
+
+    @media (max-width: 480px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .gallery-item:first-child { grid-column: span 1; }
+    }
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Scaffas<span>Homes</span></a>
+  <ul class="nav-links">
+    <li><a href="#property">The Property</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#amenities">Amenities</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://www.airbnb.com.au" target="_blank" rel="noopener" class="nav-cta">Book on Airbnb</a>
+  <button class="nav-toggle" aria-label="Menu" onclick="document.querySelector('.mobile-menu').classList.toggle('open')">☰</button>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu">
+  <a href="#property" onclick="document.querySelector('.mobile-menu').classList.remove('open')">The Property</a>
+  <a href="#gallery" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Gallery</a>
+  <a href="#amenities" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Amenities</a>
+  <a href="#contact" onclick="document.querySelector('.mobile-menu').classList.remove('open')">Contact</a>
+  <a href="https://www.airbnb.com.au" target="_blank" rel="noopener">Book on Airbnb →</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-inner">
+    <span class="hero-eyebrow">Short-Term Rentals · Sydney, Australia</span>
+    <h1>Your Home Away From Home in Sydney</h1>
+    <p>Beautifully appointed properties for short-term stays. Enjoy the comforts of home in one of the world's most vibrant cities.</p>
+    <div class="hero-btns">
+      <a href="#contact" class="btn-primary">Enquire Directly</a>
+      <a href="https://www.airbnb.com.au" target="_blank" rel="noopener" class="btn-outline">View on Airbnb</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROPERTY -->
+<section id="property">
+  <div class="container">
+    <div class="property-grid">
+      <div>
+        <p class="section-label">Featured Property</p>
+        <h2 class="section-title">Stylish Sydney Retreat</h2>
+        <p class="section-sub">A beautifully designed space with everything you need — fully equipped kitchen, fast WiFi, and a prime Sydney location. Perfect for business travellers, couples, and families.</p>
+
+        <div class="property-meta">
+          <div class="meta-item">
+            <span class="meta-icon">🛏</span>
+            <span class="meta-label">Bedrooms</span>
+            <span class="meta-val">3</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">🚿</span>
+            <span class="meta-label">Bathrooms</span>
+            <span class="meta-val">2</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">👥</span>
+            <span class="meta-label">Guests</span>
+            <span class="meta-val">up to 6</span>
+          </div>
+          <div class="meta-item">
+            <span class="meta-icon">📍</span>
+            <span class="meta-label">Location</span>
+            <span class="meta-val">Sydney, NSW</span>
+          </div>
+        </div>
+
+        <div class="price-tag">
+          <span class="price-amt">$XXX</span>
+          <span class="price-unit">AUD / night</span>
+        </div>
+
+        <div style="display:flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="https://www.airbnb.com.au" target="_blank" rel="noopener" class="btn-primary" style="display:inline-block; padding: 0.75rem 1.75rem; font-size: 0.95rem; border-radius: 8px;">Book on Airbnb</a>
+          <a href="#contact" style="display:inline-block; padding: 0.75rem 1.75rem; font-size: 0.95rem; border-radius: 8px; border: 1.5px solid var(--clr-accent); color: var(--clr-accent); text-decoration: none; font-weight: 500; transition: background 0.2s;" onmouseover="this.style.background='var(--clr-accent-light)'" onmouseout="this.style.background='transparent'">Enquire Directly</a>
+        </div>
+      </div>
+
+      <div class="property-img">
+        <!-- Replace src with your actual property photo -->
+        <img src="images/property-main.jpg" alt="Main view of the property"
+          onerror="this.parentElement.innerHTML='<div class=\'property-img-placeholder\'><svg width=\'48\' height=\'48\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.2\' d=\'M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z\'/><polyline points=\'9 22 9 12 15 12 15 22\' stroke-width=\'1.2\'/></svg><span>Add your property photo here<br><code style=\'font-size:.75rem\'>images/property-main.jpg</code></span></div>'" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery">
+  <div class="container">
+    <div class="gallery-header">
+      <p class="section-label">Photo Gallery</p>
+      <h2 class="section-title">See Every Corner</h2>
+      <p class="section-sub">Click any photo to enlarge.</p>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Gallery items — replace src values with your real photos -->
+      <div class="gallery-item" onclick="openLight(this.querySelector('img').src)">
+        <img src="images/gallery-1.jpg" alt="Living area"
+          onerror="this.parentElement.innerHTML='<div class=\'gallery-item-ph\'><svg width=\'36\' height=\'36\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke-width=\'1.2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\' stroke-width=\'1.2\'/><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.2\' d=\'M21 15l-5-5L5 21\'/></svg><span>Living Area<br><code style=\'font-size:.7rem\'>images/gallery-1.jpg</code></span></div>'" />
+      </div>
+      <div class="gallery-item" onclick="openLight(this.querySelector('img').src)">
+        <img src="images/gallery-2.jpg" alt="Kitchen"
+          onerror="this.parentElement.innerHTML='<div class=\'gallery-item-ph\'><svg width=\'36\' height=\'36\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke-width=\'1.2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\' stroke-width=\'1.2\'/><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.2\' d=\'M21 15l-5-5L5 21\'/></svg><span>Kitchen<br><code style=\'font-size:.7rem\'>images/gallery-2.jpg</code></span></div>'" />
+      </div>
+      <div class="gallery-item" onclick="openLight(this.querySelector('img').src)">
+        <img src="images/gallery-3.jpg" alt="Master bedroom"
+          onerror="this.parentElement.innerHTML='<div class=\'gallery-item-ph\'><svg width=\'36\' height=\'36\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke-width=\'1.2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\' stroke-width=\'1.2\'/><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.2\' d=\'M21 15l-5-5L5 21\'/></svg><span>Master Bedroom<br><code style=\'font-size:.7rem\'>images/gallery-3.jpg</code></span></div>'" />
+      </div>
+      <div class="gallery-item" onclick="openLight(this.querySelector('img').src)">
+        <img src="images/gallery-4.jpg" alt="Bathroom"
+          onerror="this.parentElement.innerHTML='<div class=\'gallery-item-ph\'><svg width=\'36\' height=\'36\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke-width=\'1.2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\' stroke-width=\'1.2\'/><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.2\' d=\'M21 15l-5-5L5 21\'/></svg><span>Bathroom<br><code style=\'font-size:.7rem\'>images/gallery-4.jpg</code></span></div>'" />
+      </div>
+      <div class="gallery-item" onclick="openLight(this.querySelector('img').src)">
+        <img src="images/gallery-5.jpg" alt="Outdoor / balcony"
+          onerror="this.parentElement.innerHTML='<div class=\'gallery-item-ph\'><svg width=\'36\' height=\'36\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'currentColor\'><rect x=\'3\' y=\'3\' width=\'18\' height=\'18\' rx=\'2\' stroke-width=\'1.2\'/><circle cx=\'8.5\' cy=\'8.5\' r=\'1.5\' stroke-width=\'1.2\'/><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'1.2\' d=\'M21 15l-5-5L5 21\'/></svg><span>Outdoor / Balcony<br><code style=\'font-size:.7rem\'>images/gallery-5.jpg</code></span></div>'" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLight()">
+  <button class="lightbox-close" onclick="closeLight()" aria-label="Close">×</button>
+  <img src="" alt="Gallery photo" id="lightboxImg" />
+</div>
+
+<!-- AMENITIES -->
+<section id="amenities">
+  <div class="container">
+    <p class="section-label">What's Included</p>
+    <h2 class="section-title">Amenities</h2>
+    <p class="section-sub">Everything you need for a comfortable stay — just bring your bags.</p>
+
+    <div class="amenities-grid">
+      <div class="amenity-card"><span class="amenity-icon">📶</span><span class="amenity-name">Fast WiFi</span></div>
+      <div class="amenity-card"><span class="amenity-icon">❄️</span><span class="amenity-name">Air Conditioning</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🍳</span><span class="amenity-name">Fully Equipped Kitchen</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🅿️</span><span class="amenity-name">Free Parking</span></div>
+      <div class="amenity-card"><span class="amenity-icon">📺</span><span class="amenity-name">Smart TV / Netflix</span></div>
+      <div class="amenity-card"><span class="amenity-icon">👕</span><span class="amenity-name">Washer & Dryer</span></div>
+      <div class="amenity-card"><span class="amenity-icon">☕</span><span class="amenity-name">Coffee Machine</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🛁</span><span class="amenity-name">Bath & Shower</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🔐</span><span class="amenity-name">Self Check-In</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🧹</span><span class="amenity-name">Fresh Linen & Towels</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🏙️</span><span class="amenity-name">City Views</span></div>
+      <div class="amenity-card"><span class="amenity-icon">🚶</span><span class="amenity-name">Walkable Location</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-wrap">
+      <div class="contact-info">
+        <p class="section-label">Get in Touch</p>
+        <h2 class="section-title">Book Directly or Ask a Question</h2>
+        <p>Prefer to skip the platform fees? Reach out directly and we'll get back to you within 24 hours. We'd love to host you.</p>
+
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📧</div>
+          <div class="contact-detail-text">
+            <strong>info@scaffashomes.com.au</strong>
+            <span>Email us anytime</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">📍</div>
+          <div class="contact-detail-text">
+            <strong>Sydney, New South Wales</strong>
+            <span>Exact address provided on booking</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">🏠</div>
+          <div class="contact-detail-text">
+            <strong>Also on Airbnb</strong>
+            <span><a href="https://www.airbnb.com.au" target="_blank" rel="noopener" style="color: var(--clr-accent);">View our Airbnb listing →</a></span>
+          </div>
+        </div>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <div class="form-row">
+          <div>
+            <label for="fname">First name</label>
+            <input type="text" id="fname" name="fname" placeholder="Jane" required />
+          </div>
+          <div>
+            <label for="lname">Last name</label>
+            <input type="text" id="lname" name="lname" placeholder="Smith" required />
+          </div>
+        </div>
+        <div>
+          <label for="email">Email address</label>
+          <input type="email" id="email" name="email" placeholder="jane@example.com" required />
+        </div>
+        <div>
+          <label for="phone">Phone number (optional)</label>
+          <input type="tel" id="phone" name="phone" placeholder="+61 4XX XXX XXX" />
+        </div>
+        <div class="form-row">
+          <div>
+            <label for="checkin">Check-in date</label>
+            <input type="date" id="checkin" name="checkin" />
+          </div>
+          <div>
+            <label for="checkout">Check-out date</label>
+            <input type="date" id="checkout" name="checkout" />
+          </div>
+        </div>
+        <div>
+          <label for="guests">Number of guests</label>
+          <select id="guests" name="guests">
+            <option value="">Select…</option>
+            <option>1</option><option>2</option><option>3</option>
+            <option>4</option><option>5</option><option>6</option>
+          </select>
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" placeholder="Tell us a bit about your trip…"></textarea>
+        </div>
+        <button type="submit" class="btn-submit">Send Enquiry</button>
+        <div class="form-success" id="formSuccess">
+          ✅ Thanks! We'll be in touch within 24 hours.
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Scaffas<span>Homes</span></div>
+  <p>Short-term rentals in Sydney, Australia</p>
+  <div class="footer-links">
+    <a href="#property">The Property</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#amenities">Amenities</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.airbnb.com.au" target="_blank" rel="noopener">Airbnb</a>
+  </div>
+  <div class="footer-copy">© 2025 Scaffas Homes · scaffashomes.com.au · All rights reserved</div>
+</footer>
+
+<script>
+  function openLight(src) {
+    if (!src || src.startsWith('data:') || !src.match(/\.(jpg|jpeg|png|webp|avif)/i)) return;
+    document.getElementById('lightboxImg').src = src;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLight() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLight(); });
+
+  document.getElementById('contactForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const btn = this.querySelector('.btn-submit');
+    btn.textContent = 'Sending…';
+    btn.disabled = true;
+
+    // TODO: Replace this with a real form backend (e.g. Formspree, Netlify Forms, EmailJS)
+    // Example with Formspree: change action="https://formspree.io/f/YOUR_ID" and remove this JS block
+    setTimeout(() => {
+      document.getElementById('formSuccess').style.display = 'block';
+      this.reset();
+      btn.textContent = 'Send Enquiry';
+      btn.disabled = false;
+    }, 800);
+  });
+
+  // Smooth close mobile menu on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('.mobile-menu').classList.remove('open');
+  });
+</script>
+
+</body>
+</html>
